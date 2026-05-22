@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "pilotos")
@@ -31,16 +32,27 @@ public class Piloto {
     @Column(name = "telefono", nullable = false, length = 20)
     private String telefono;
 
+    @Column(name = "numero_certificado_dgac", nullable = false, unique = true, length = 50)
+    private String numeroCertificadoDgac;
+
+    @Column(name = "fecha_vencimiento_certificacion", nullable = false)
+    private LocalDate fechaVencimientoCertificacion;
+
     public Piloto() {}
 
-    public Piloto(int id, String run, String nombres, String apellidos, String correo, String telefono) {
+
+    public Piloto(int id, String run, String nombres, String apellidos, String correo, String telefono, 
+                  String numeroCertificadoDgac, LocalDate fechaVencimientoCertificacion) {
         this.id = id;
         this.run = run;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
         this.telefono = telefono;
+        this.numeroCertificadoDgac = numeroCertificadoDgac;
+        this.fechaVencimientoCertificacion = fechaVencimientoCertificacion;
     }
+
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -59,4 +71,10 @@ public class Piloto {
 
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
-    }
+
+    public String getNumeroCertificadoDgac() { return numeroCertificadoDgac; }
+    public void setNumeroCertificadoDgac(String numeroCertificadoDgac) { this.numeroCertificadoDgac = numeroCertificadoDgac; }
+
+    public LocalDate getFechaVencimientoCertificacion() { return fechaVencimientoCertificacion; }
+    public void setFechaVencimientoCertificacion(LocalDate fechaVencimientoCertificacion) { this.fechaVencimientoCertificacion = fechaVencimientoCertificacion; }
+}

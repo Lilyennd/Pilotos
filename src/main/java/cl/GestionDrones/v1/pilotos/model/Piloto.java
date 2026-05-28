@@ -15,7 +15,7 @@ public class Piloto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "run", nullable = false, unique = true, length = 20)
     private String run;
@@ -40,8 +40,7 @@ public class Piloto {
 
     public Piloto() {}
 
-
-    public Piloto(int id, String run, String nombres, String apellidos, String correo, String telefono, 
+    public Piloto(Integer id, String run, String nombres, String apellidos, String correo, String telefono, 
                   String numeroCertificadoDgac, LocalDate fechaVencimientoCertificacion) {
         this.id = id;
         this.run = run;
@@ -53,9 +52,8 @@ public class Piloto {
         this.fechaVencimientoCertificacion = fechaVencimientoCertificacion;
     }
 
-
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
     public String getRun() { return run; }
     public void setRun(String run) { this.run = run; }

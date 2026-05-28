@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record UpdatePilotoRquest(
+public record UpdatePilotoRequest(
     @NotBlank(message = "El RUN no puede ser vacío") 
     String run,
 

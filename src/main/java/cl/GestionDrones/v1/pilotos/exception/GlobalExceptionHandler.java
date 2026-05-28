@@ -12,10 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/**
- * GlobalExceptionHandler unificado y simplificado para la gestión de Pilotos.
- * Utiliza el estándar moderno Problem Details API (RFC 7807) de Spring Boot 3.x.
- */
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -23,9 +20,7 @@ public class GlobalExceptionHandler {
         System.out.println("✅ GlobalExceptionHandler de Pilotos REGISTRADO CORRECTAMENTE");
     }
 
-    /**
-     * 1. PRIORIDAD MÁXIMA: Maneja cuando un certificado de la DGAC ya expiró
-     */
+
     @ExceptionHandler(CertificadoVencidoException.class)
     public ProblemDetail handleCertificadoVencido(CertificadoVencidoException ex) {
         System.out.println("🔴 ALERTA DE NEGOCIO: Certificado vencido detectado");
@@ -47,10 +42,7 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
-    /**
-     * 2. VALIDACIÓN SIMPLIFICADA: Traduce los errores de @NotNull, @NotBlank, @FutureOrPresent, etc.
-     * Utiliza un bucle 'for' limpio y fácil de entender.
-     */
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidationErrors(MethodArgumentNotValidException ex) {
         System.out.println("🔴 Error de validación detectado en los datos del Piloto");
@@ -61,11 +53,7 @@ public class GlobalExceptionHandler {
         );
         problem.setTitle("Validation Error");
         problem.setProperty("timestamp", Instant.now());
-
-        // Diccionario para guardar los errores estructurados
         Map<String, String> errors = new HashMap<>();
-
-        // Recorremos los errores uno a uno de forma simple
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             String campo = error.getField();
             String mensaje = error.getDefaultMessage();
@@ -82,10 +70,7 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
-    /**
-     * 3. ERRORES DE PARSEO: Capta cuando el JSON viene mal escrito o las fechas (LocalDate) 
-     * no tienen el formato correcto (ej: enviar "25-12-2026" en lugar de "2026-12-25").
-     */
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail handleJsonParseError(HttpMessageNotReadableException ex) {
         System.out.println("🟡 Error de lectura en el JSON enviado");
@@ -101,22 +86,20 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
-    /**
-     * 4. COMODÍN: Captura cualquier otro error inesperado en el servidor para que la API no se rompa de forma fea.
-     */
-    @ExceptionHandler(Exception.class)
-    public ProblemDetail handleGeneralException(Exception ex) {
-        System.out.println("❌ EXCEPCIÓN NO CONTROLADA: " + ex.getMessage());
-        ex.printStackTrace();
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ProblemDetail handleResourceNotFound(ResourceNotFoundException ex) {
+        System.out.println("🟡 RECURSO NO ENCONTRADO: " + ex.getMessage());
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.INTERNAL_SERVER_ERROR, // Código 500
-                "Ocurrió un error inesperado en el módulo de drones"
+                HttpStatus.NOT_FOUND, // Código 404: Not Found
+                ex.getMessage()
         );
 
-        problem.setTitle("Internal Server Error");
+        problem.setTitle("Resource Not Found");
         problem.setProperty("timestamp", Instant.now());
-        problem.setProperty("tipo_excepcion", ex.getClass().getSimpleName());
         return problem;
     }
+
+
 }

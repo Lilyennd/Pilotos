@@ -2,6 +2,7 @@ package cl.GestionDrones.v1.pilotos.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,6 +23,7 @@ public record UpdatePilotoRequest(
     String numeroCertificadoDgac,
 
     @NotNull(message = "La fecha de vencimiento de la certificación es obligatoria") 
+    @Future(message = "El certificado médico/vuelo ya está vencido o no está vigente")
     LocalDate fechaExpiracionCertificado
 ) {
 }

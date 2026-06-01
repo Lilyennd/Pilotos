@@ -15,9 +15,6 @@ public record UpdatePilotoRequest(
     @NotBlank(message = "El apellido no puede ser vacío") 
     String apellido,
 
-    @NotBlank(message = "El correo no puede ser vacío")
-    String correo,
-
     @NotBlank(message = "El teléfono no puede ser vacío") 
     String telefono,
 

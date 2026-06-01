@@ -12,7 +12,6 @@ public class PilotoMapper {
         piloto.setRun(request.run());
         piloto.setNombres(request.nombres()); 
         piloto.setApellidos(request.apellidos()); 
-        piloto.setCorreo(request.correo());
         piloto.setTelefono(request.telefono());
         piloto.setNumeroCertificadoDgac(request.numeroCertificadoDgac());
         piloto.setFechaVencimientoCertificacion(request.fechaVencimientoCertificacion()); 
@@ -27,7 +26,6 @@ public class PilotoMapper {
             request.run(),
             request.nombre(),
             request.apellido(),
-            request.correo(), 
             request.telefono(),
             request.numeroCertificadoDgac(),
             request.fechaExpiracionCertificado()

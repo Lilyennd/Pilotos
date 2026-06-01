@@ -4,9 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 public record CreatePilotoRequest(
     @NotBlank(message = "El RUN no puede estar vacío") 
@@ -17,10 +14,7 @@ public record CreatePilotoRequest(
     
     @NotBlank(message = "El apellido no puede estar vacío") 
     String apellidos,  
-    
-    @NotBlank(message = "El correo no puede estar vacío") 
-    String correo,
-    
+
     @NotBlank(message = "El teléfono no puede estar vacío") 
     String telefono,
     

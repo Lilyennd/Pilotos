@@ -26,8 +26,6 @@ public class Piloto {
     @Column(name = "apellidos", nullable = false, length = 100)
     private String apellidos;
 
-    @Column(name = "correo", nullable = false, unique = true, length = 100)
-    private String correo;
 
     @Column(name = "telefono", nullable = false, length = 20)
     private String telefono;
@@ -40,13 +38,12 @@ public class Piloto {
 
     public Piloto() {}
 
-    public Piloto(Integer id, String run, String nombres, String apellidos, String correo, String telefono, 
+    public Piloto(Integer id, String run, String nombres, String apellidos, String telefono, 
                   String numeroCertificadoDgac, LocalDate fechaVencimientoCertificacion) {
         this.id = id;
         this.run = run;
         this.nombres = nombres;
         this.apellidos = apellidos;
-        this.correo = correo;
         this.telefono = telefono;
         this.numeroCertificadoDgac = numeroCertificadoDgac;
         this.fechaVencimientoCertificacion = fechaVencimientoCertificacion;
@@ -63,9 +60,6 @@ public class Piloto {
 
     public String getApellidos() { return apellidos; }
     public void setApellidos(String apellidos) { this.apellidos = apellidos; }
-
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
 
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }

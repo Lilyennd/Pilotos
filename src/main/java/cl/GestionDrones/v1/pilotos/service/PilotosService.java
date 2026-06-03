@@ -40,8 +40,8 @@ public class PilotosService {
 
      
         pilotoExistente.setRun(request.run());
-        pilotoExistente.setNombres(request.nombre());
-        pilotoExistente.setApellidos(request.apellido());
+        pilotoExistente.setNombres(request.nombres());
+        pilotoExistente.setApellidos(request.apellidos());
         pilotoExistente.setTelefono(request.telefono());
         pilotoExistente.setNumeroCertificadoDgac(request.numeroCertificadoDgac());
         pilotoExistente.setFechaVencimientoCertificacion(request.fechaExpiracionCertificado()); 

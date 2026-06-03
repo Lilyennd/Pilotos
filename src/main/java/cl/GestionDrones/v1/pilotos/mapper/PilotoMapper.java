@@ -24,8 +24,8 @@ public class PilotoMapper {
         return new Piloto(
             0, 
             request.run(),
-            request.nombre(),
-            request.apellido(),
+            request.nombres(),
+            request.apellidos(),
             request.telefono(),
             request.numeroCertificadoDgac(),
             request.fechaExpiracionCertificado()

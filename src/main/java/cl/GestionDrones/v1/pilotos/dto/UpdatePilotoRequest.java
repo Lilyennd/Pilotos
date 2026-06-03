@@ -11,10 +11,10 @@ public record UpdatePilotoRequest(
     String run,
 
     @NotBlank(message = "El nombre no puede ser vacío") 
-    String nombre,
+    String nombres,
 
     @NotBlank(message = "El apellido no puede ser vacío") 
-    String apellido,
+    String apellidos,
 
     @NotBlank(message = "El teléfono no puede ser vacío") 
     String telefono,

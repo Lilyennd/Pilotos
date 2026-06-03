@@ -12,7 +12,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -20,20 +19,18 @@ public class GlobalExceptionHandler {
         System.out.println("✅ GlobalExceptionHandler de Pilotos REGISTRADO CORRECTAMENTE");
     }
 
-
     @ExceptionHandler(CertificadoVencidoException.class)
     public ProblemDetail handleCertificadoVencido(CertificadoVencidoException ex) {
         System.out.println("🔴 ALERTA DE NEGOCIO: Certificado vencido detectado");
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT, // Código 409: Conflicto con las reglas de negocio
+                HttpStatus.CONFLICT, 
                 ex.getMessage()
         );
 
         problem.setTitle("Certificado DGAC Vencido");
         problem.setProperty("timestamp", Instant.now());
         
-        // Datos específicos e importantes del certificado
         problem.setProperty("num_certificado_afectado", ex.getNumeroCertificadoDgac());
         problem.setProperty("fecha_expiracion_registrada", ex.getFechaVencimientoCertificacion());
         problem.setProperty("dias_desde_vencimiento", 
@@ -42,13 +39,12 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidationErrors(MethodArgumentNotValidException ex) {
         System.out.println("🔴 Error de validación detectado en los datos del Piloto");
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST, // Código 400: Petición incorrecta
+                HttpStatus.BAD_REQUEST, 
                 "Error de validación en los datos enviados"
         );
         problem.setTitle("Validation Error");
@@ -65,11 +61,9 @@ public class GlobalExceptionHandler {
             errors.put(campo, mensaje);
         }
 
-        // Añadimos el diccionario al JSON de respuesta
         problem.setProperty("errors", errors);
         return problem;
     }
-
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail handleJsonParseError(HttpMessageNotReadableException ex) {
@@ -86,13 +80,12 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
-
     @ExceptionHandler(ResourceNotFoundException.class)
     public ProblemDetail handleResourceNotFound(ResourceNotFoundException ex) {
         System.out.println("🟡 RECURSO NO ENCONTRADO: " + ex.getMessage());
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.NOT_FOUND, // Código 404: Not Found
+                HttpStatus.NOT_FOUND, 
                 ex.getMessage()
         );
 
@@ -100,6 +93,4 @@ public class GlobalExceptionHandler {
         problem.setProperty("timestamp", Instant.now());
         return problem;
     }
-
-
 }

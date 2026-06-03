@@ -33,7 +33,6 @@ public class PilotosController {
         this.pilotosService = pilotosService;
     }
 
-    
     @PostMapping
     public ResponseEntity<Map<String, Object>> crear(@Valid @RequestBody CreatePilotoRequest request, BindingResult result) {
         if (result.hasErrors()) {
@@ -52,7 +51,6 @@ public class PilotosController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    
     @GetMapping
     public ResponseEntity<Map<String, Object>> listarTodos() {
         List<Piloto> pilotos = pilotosService.getAllPilotos();
@@ -69,7 +67,6 @@ public class PilotosController {
         response.put("datos", pilotos);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> obtenerPorId(@PathVariable Integer id) {
@@ -88,7 +85,6 @@ public class PilotosController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-   
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, Object>> actualizar(@PathVariable Integer id, @Valid @RequestBody UpdatePilotoRequest request, BindingResult result) {
         if (result.hasErrors()) {
@@ -105,8 +101,6 @@ public class PilotosController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    
-    
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> eliminar(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
@@ -125,7 +119,6 @@ public class PilotosController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    
     @GetMapping("/run/{run}")
     public ResponseEntity<Map<String, Object>> obtenerPorRun(@PathVariable String run) {
         List<Piloto> pilotosEncontrados = pilotosService.buscarPorRun(run);
@@ -144,7 +137,6 @@ public class PilotosController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    
     @GetMapping("/certificado/{certificado}")
     public ResponseEntity<Map<String, Object>> obtenerPorCertificado(@PathVariable String certificado) {
         List<Piloto> pilotosEncontrados = pilotosService.buscarPorCertificado(certificado);
@@ -162,7 +154,6 @@ public class PilotosController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    
     private ResponseEntity<Map<String, Object>> manejarErrores(BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errores = new HashMap<>();

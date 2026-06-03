@@ -14,9 +14,10 @@ import org.springframework.stereotype.Repository;
 public interface  PilotosRepository extends JpaRepository <Piloto , Integer> {
 
     @Query(value = "SELECT * FROM pilotos WHERE run = :run", nativeQuery = true)
-    List<Piloto> buscarPorRun(@Param("run") int run);
+    List<Piloto> buscarPorRun(@Param("run") String run);
 
     @Query(value = "SELECT * FROM pilotos WHERE numero_certificado_dgac = :certificado", nativeQuery = true)
     List<Piloto> buscarPorCertificado(@Param("certificado") String certificado);
 
 }
+

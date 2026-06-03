@@ -59,7 +59,7 @@ public class PilotosService {
     }
 
     
-    public List<Piloto> buscarPorRun(int run) {
+    public List<Piloto> buscarPorRun(String run) {
         return pilotosRepository.buscarPorRun(run);
     }
 

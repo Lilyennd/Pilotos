@@ -34,38 +34,29 @@ public class PilotosController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crear(@Valid @RequestBody CreatePilotoRequest request, BindingResult result) {
-        if (result.hasErrors()) {
-            return manejarErrores(result);
-        }
+    public ResponseEntity<Map<String, Object>> crear(
+        @Valid @RequestBody CreatePilotoRequest request,
+        BindingResult result) {
 
-        Piloto pilotoParaCrear = new Piloto();
-        org.springframework.beans.BeanUtils.copyProperties(request, pilotoParaCrear);
-        Piloto nuevoPiloto = pilotosService.createPiloto(pilotoParaCrear);
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.CREATED.value());
-        response.put("mensaje", "Piloto registrado exitosamente");
-        response.put("datos", nuevoPiloto);
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    if (result.hasErrors()) {
+        return manejarErrores(result);
     }
 
+    Piloto nuevoPiloto = pilotosService.savePiloto(request);
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("status", HttpStatus.CREATED.value());
+    response.put("mensaje", "Piloto registrado exitosamente");
+    response.put("datos", nuevoPiloto);
+
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
+}
+
     @GetMapping
-    public ResponseEntity<Map<String, Object>> listarTodos() {
+    public ResponseEntity<List<Piloto>> listarPilotos() {
         List<Piloto> pilotos = pilotosService.getAllPilotos();
-        Map<String, Object> response = new HashMap<>();
-        
-        if (pilotos.isEmpty()) {
-            response.put("status", HttpStatus.NO_CONTENT.value());
-            response.put("mensaje", "No existen pilotos registrados en el sistema");
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        }
-        
-        response.put("status", HttpStatus.OK.value());
-        response.put("mensaje", "Listado de pilotos obtenido correctamente");
-        response.put("datos", pilotos);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    
+        return ResponseEntity.ok(pilotos);
     }
 
     @GetMapping("/{id}")
@@ -119,24 +110,6 @@ public class PilotosController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/run/{run}")
-    public ResponseEntity<Map<String, Object>> obtenerPorRun(@PathVariable String run) {
-        List<Piloto> pilotosEncontrados = pilotosService.buscarPorRun(run);
-        Map<String, Object> response = new HashMap<>();
-
-        if (pilotosEncontrados == null || pilotosEncontrados.isEmpty()) {
-            response.put("status", HttpStatus.NOT_FOUND.value());
-            response.put("problema", "No se encontró ningún piloto con el RUN proporcionado");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-
-        Piloto piloto = pilotosEncontrados.get(0);
-        response.put("status", HttpStatus.OK.value());
-        response.put("mensaje", "Piloto encontrado por RUN");
-        response.put("datos", piloto);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     @GetMapping("/certificado/{certificado}")
     public ResponseEntity<Map<String, Object>> obtenerPorCertificado(@PathVariable String certificado) {
         List<Piloto> pilotosEncontrados = pilotosService.buscarPorCertificado(certificado);
@@ -168,4 +141,18 @@ public class PilotosController {
         
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-}
+    @GetMapping("/run/{run}")
+    public ResponseEntity<?> obtenerPorRun(@PathVariable String run) {
+        try {
+            Piloto piloto = pilotosService.getPilotoByRun(run);
+            
+            return ResponseEntity.ok(piloto);
+            
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Piloto no encontrado");
+            error.put("mensaje", e.getMessage());
+            
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+}}

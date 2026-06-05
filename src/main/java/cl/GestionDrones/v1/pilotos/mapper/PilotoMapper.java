@@ -28,7 +28,7 @@ public class PilotoMapper {
             request.apellidos(),
             request.telefono(),
             request.numeroCertificadoDgac(),
-            request.fechaExpiracionCertificado()
+            request.fechaVencimientoCertificacion ()
         );
     }
 }

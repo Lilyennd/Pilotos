@@ -2,6 +2,8 @@ package cl.GestionDrones.v1.pilotos.repository;
 
 import cl.GestionDrones.v1.pilotos.model.Piloto;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,5 +17,7 @@ public interface PilotosRepository extends JpaRepository<Piloto, Integer> {
 
     @Query(value = "SELECT * FROM pilotos WHERE numero_certificado_dgac = :certificado", nativeQuery = true)
     List<Piloto> buscarPorCertificado(@Param("certificado") String certificado);
+
+    Optional<Piloto> findByRun(String run);
 }
 

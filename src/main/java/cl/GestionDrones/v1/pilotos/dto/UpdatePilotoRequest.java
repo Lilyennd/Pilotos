@@ -24,6 +24,6 @@ public record UpdatePilotoRequest(
 
     @NotNull(message = "La fecha de vencimiento de la certificación es obligatoria") 
     @Future(message = "El certificado médico/vuelo ya está vencido o no está vigente")
-    LocalDate fechaExpiracionCertificado
+    LocalDate fechaVencimientoCertificacion 
 ) {
 }

@@ -1,8 +1,14 @@
 package cl.GestionDrones.v1.pilotos.service;
 import cl.GestionDrones.v1.pilotos.repository.PilotosRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 
+import cl.GestionDrones.v1.pilotos.dto.CreatePilotoRequest;
 import cl.GestionDrones.v1.pilotos.dto.UpdatePilotoRequest;
+import cl.GestionDrones.v1.pilotos.exception.CertificadoVencidoException;
+import cl.GestionDrones.v1.pilotos.exception.ResourceNotFoundException;
+import cl.GestionDrones.v1.pilotos.mapper.PilotoMapper;
 import cl.GestionDrones.v1.pilotos.model.Piloto;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +33,22 @@ public class PilotosService {
     }
 
 
-    public Piloto createPiloto(Piloto piloto) {
-        return pilotosRepository.save(piloto);
+    public Piloto savePiloto(CreatePilotoRequest request) {
+        if (request.fechaVencimientoCertificacion() != null && 
+            request.fechaVencimientoCertificacion().isBefore(LocalDate.now())) {
+            
+            throw new CertificadoVencidoException(
+                "El certificado DGAC ya se encuentra vencido.", 
+                request.numeroCertificadoDgac(), 
+                request.fechaVencimientoCertificacion()
+            );
+        }
+
+        Piloto nuevoPiloto = PilotoMapper.toEntity(request);
+        return pilotosRepository.save(nuevoPiloto);
     }
+
+
 
     public Piloto updatePiloto(Integer id, UpdatePilotoRequest request) {
         Piloto pilotoExistente = getPilotoById(id);
@@ -44,7 +63,7 @@ public class PilotosService {
         pilotoExistente.setApellidos(request.apellidos());
         pilotoExistente.setTelefono(request.telefono());
         pilotoExistente.setNumeroCertificadoDgac(request.numeroCertificadoDgac());
-        pilotoExistente.setFechaVencimientoCertificacion(request.fechaExpiracionCertificado()); 
+        pilotoExistente.setFechaVencimientoCertificacion(request.fechaVencimientoCertificacion ()); 
 
         return pilotosRepository.save(pilotoExistente);
     }
@@ -59,11 +78,17 @@ public class PilotosService {
     }
 
     
-    public List<Piloto> buscarPorRun(String run) {
-        return pilotosRepository.buscarPorRun(run);
+    public Piloto getPilotoByRun(String run) {
+        return pilotosRepository.findByRun(run)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "No se encontró un piloto registrado con el RUN: " + run));
     }
 
+    
     public List<Piloto> buscarPorCertificado(String certificado) {
         return pilotosRepository.buscarPorCertificado(certificado);
     }
+
+
+  
 }

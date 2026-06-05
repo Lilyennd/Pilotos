@@ -169,4 +169,26 @@ private Map<String, String> construirError(String error, String mensaje) {
         
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+             @GetMapping("/pilotos/por-vencer")
+        public ResponseEntity<?> getPilotosConCertificadoPorVencer() {
+
+        List<Piloto> pilotosx =
+                pilotosService.getPilotosConCertificadoPorVencer();
+
+        if (pilotosx.isEmpty()) {
+
+                Map<String, String> respuesta = new HashMap<>();
+
+                respuesta.put(
+                        "mensaje",
+                        "No existen pilotos con certificado próximo a vencer"
+                );
+
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(respuesta);
+        }
+
+        return ResponseEntity.ok(pilotosx);
+}
 }

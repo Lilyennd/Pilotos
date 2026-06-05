@@ -120,22 +120,23 @@ public class PilotosController {
     }
 
     @GetMapping("/run/{run}")
-    public ResponseEntity<Map<String, Object>> obtenerPorRun(@PathVariable String run) {
-        List<Piloto> pilotosEncontrados = pilotosService.buscarPorRun(run);
-        Map<String, Object> response = new HashMap<>();
+public ResponseEntity<?> obtenerPorRun(@PathVariable String run) {
+    List<Piloto> pilotos = pilotosService.buscarPorRun(run);
 
-        if (pilotosEncontrados == null || pilotosEncontrados.isEmpty()) {
-            response.put("status", HttpStatus.NOT_FOUND.value());
-            response.put("problema", "No se encontró ningún piloto con el RUN proporcionado");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-
-        Piloto piloto = pilotosEncontrados.get(0);
-        response.put("status", HttpStatus.OK.value());
-        response.put("mensaje", "Piloto encontrado por RUN");
-        response.put("datos", piloto);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    if (pilotos == null || pilotos.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(construirError("No encontrado", "No existe piloto con el RUN: " + run));
     }
+
+    return ResponseEntity.ok(pilotos.get(0));
+}
+private Map<String, String> construirError(String error, String mensaje) {
+    Map<String, String> respuestaError = new HashMap<>();
+    respuestaError.put("error", error);
+    respuestaError.put("mensaje", mensaje);
+    respuestaError.put("timestamp", java.time.LocalDateTime.now().toString()); // Un toque profesional extra
+    return respuestaError;
+}
 
     @GetMapping("/certificado/{certificado}")
     public ResponseEntity<Map<String, Object>> obtenerPorCertificado(@PathVariable String certificado) {

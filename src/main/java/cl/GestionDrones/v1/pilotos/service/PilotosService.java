@@ -2,6 +2,8 @@ package cl.GestionDrones.v1.pilotos.service;
 import cl.GestionDrones.v1.pilotos.repository.PilotosRepository;
 
 import java.time.LocalDate;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import cl.GestionDrones.v1.pilotos.dto.CreatePilotoRequest;
@@ -84,11 +86,22 @@ public class PilotosService {
                     "No se encontró un piloto registrado con el RUN: " + run));
     }
 
-    
     public List<Piloto> buscarPorCertificado(String certificado) {
         return pilotosRepository.buscarPorCertificado(certificado);
     }
 
 
-  
+
+    public List<Piloto> getPilotosConCertificadoPorVencer() {
+
+    LocalDate hoy = LocalDate.now();
+    LocalDate fechaLimite = hoy.plusDays(30);
+
+    return pilotosRepository
+            .findAll()
+            .stream()
+            .filter(a -> !a.getFechaVencimientoCertificacion().isBefore(hoy))
+            .filter(a -> !a.getFechaVencimientoCertificacion().isAfter(fechaLimite))
+            .toList();
+    }
 }

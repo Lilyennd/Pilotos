@@ -110,6 +110,25 @@ public class PilotosController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/run/{run}")
+public ResponseEntity<?> obtenerPorRun(@PathVariable String run) {
+    List<Piloto> pilotos = pilotosService.buscarPorRun(run);
+
+    if (pilotos == null || pilotos.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(construirError("No encontrado", "No existe piloto con el RUN: " + run));
+    }
+
+    return ResponseEntity.ok(pilotos.get(0));
+}
+private Map<String, String> construirError(String error, String mensaje) {
+    Map<String, String> respuestaError = new HashMap<>();
+    respuestaError.put("error", error);
+    respuestaError.put("mensaje", mensaje);
+    respuestaError.put("timestamp", java.time.LocalDateTime.now().toString()); // Un toque profesional extra
+    return respuestaError;
+}
+
     @GetMapping("/certificado/{certificado}")
     public ResponseEntity<Map<String, Object>> obtenerPorCertificado(@PathVariable String certificado) {
         List<Piloto> pilotosEncontrados = pilotosService.buscarPorCertificado(certificado);
@@ -156,3 +175,27 @@ public class PilotosController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
 }}
+    }
+
+             @GetMapping("/pilotos/por-vencer")
+        public ResponseEntity<?> getPilotosConCertificadoPorVencer() {
+
+        List<Piloto> pilotosx =
+                pilotosService.getPilotosConCertificadoPorVencer();
+
+        if (pilotosx.isEmpty()) {
+
+                Map<String, String> respuesta = new HashMap<>();
+
+                respuesta.put(
+                        "mensaje",
+                        "No existen pilotos con certificado próximo a vencer"
+                );
+
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(respuesta);
+        }
+
+        return ResponseEntity.ok(pilotosx);
+}
+}

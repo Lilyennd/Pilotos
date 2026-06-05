@@ -3,7 +3,6 @@ import cl.GestionDrones.v1.pilotos.repository.PilotosRepository;
 
 import java.time.LocalDate;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import cl.GestionDrones.v1.pilotos.dto.CreatePilotoRequest;

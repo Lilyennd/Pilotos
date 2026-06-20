@@ -2,7 +2,7 @@ package cl.GestionDrones.v1.pilotos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-//asdsd
+
 @SpringBootApplication
 public class PilotosApplication {
 

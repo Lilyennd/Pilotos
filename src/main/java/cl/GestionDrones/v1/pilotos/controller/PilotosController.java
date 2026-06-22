@@ -24,6 +24,7 @@ import cl.GestionDrones.v1.pilotos.service.PilotosService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -42,6 +43,18 @@ public class PilotosController {
     }
 
     @Operation(summary = "Crear un nuevo piloto", description = "Registra un piloto en el sistema con validación de datos")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Estructura JSON del nuevo piloto a registrar",
+        required = true,
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = CreatePilotoRequest.class),
+            examples = @ExampleObject(
+                name = "Ejemplo de Nuevo Piloto",
+                value = "{\n  \"run\": \"12345678-9\",\n  \"nombres\": \"Juan Alberto\",\n  \"apellidos\": \"Pérez González\",\n  \"telefono\": \"+56912345678\",\n  \"numeroCertificadoDgac\": \"DGAC-123456\",\n  \"fechaVencimientoCertificacion\": \"2027-08-24\"\n}"
+            )
+        )
+    )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Piloto registrado exitosamente",
                      content = @Content(mediaType = "application/json", schema = @Schema(implementation = Piloto.class))),
@@ -50,7 +63,6 @@ public class PilotosController {
     })
     @PostMapping
     public ResponseEntity<Map<String, Object>> crear(
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Estructura JSON del nuevo piloto a registrar", required = true)
         @Valid @RequestBody CreatePilotoRequest request,
         BindingResult result) {
 
@@ -106,6 +118,18 @@ public class PilotosController {
     }
 
     @Operation(summary = "Actualizar piloto", description = "Modifica los datos de un piloto existente usando su ID")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Estructura JSON con los nuevos datos del piloto",
+        required = true,
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = UpdatePilotoRequest.class),
+            examples = @ExampleObject(
+                name = "Ejemplo de Actualización de Piloto",
+                value = "{\n  \"nombres\": \"Juan Alberto\",\n  \"apellidos\": \"Pérez Silva\",\n  \"telefono\": \"+56998765432\",\n  \"numeroCertificadoDgac\": \"DGAC-123456-MOD\",\n  \"fechaVencimientoCertificacion\": \"2028-11-15\"\n}"
+            )
+        )
+    )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Datos del piloto actualizados correctamente",
                      content = @Content(mediaType = "application/json", schema = @Schema(implementation = Piloto.class))),
@@ -116,7 +140,6 @@ public class PilotosController {
     public ResponseEntity<Map<String, Object>> actualizar(
         @Parameter(description = "ID del piloto que se desea actualizar", required = true, example = "1")
         @PathVariable Integer id, 
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Estructura JSON con los nuevos datos del piloto", required = true)
         @Valid @RequestBody UpdatePilotoRequest request, 
         BindingResult result) {
             
